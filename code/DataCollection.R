@@ -35,14 +35,20 @@ download_savant_data <- function(start_date, end_date, verbose = FALSE) {
   return(data)
 }
 
+# MLB 2025
 MLB_2025_March <- download_savant_data(start_date = "2025-03-27", end_date = "2025-03-31")
 MLB_2025_April <- download_savant_data(start_date = "2025-04-01", end_date = "2025-04-30")
 MLB_2025_May <- download_savant_data(start_date = "2025-05-01", end_date = "2025-05-31")
 MLB_2025_June <- download_savant_data(start_date = "2025-06-01", end_date = "2025-06-30")
+MLB_2025_July <- download_savant_data(start_date = "2025-07-01", end_date = "2025-07-31")
+MLB_2025_August <- download_savant_data(start_date = "2025-08-01", end_date = "2025-08-31")
+MLB_2025_September <- download_savant_data(start_date = "2025-09-01", end_date = "2025-09-28") # End of season
 
-MLB_2025_TJ <- rbind(MLB_2025_March,
+MLB_2025 <- rbind(MLB_2025_March,
                      MLB_2025_April,
                      MLB_2025_May,
-                     MLB_2025_June)
+                     MLB_2025_June,
+                     MLB_2025_July,
+                     MLB_2025_September)
 
-write.csv(MLB_2025_TJ, "MLB_2025_TJ.csv")
+write.csv(MLB_2025, "MLB_2025.csv")
