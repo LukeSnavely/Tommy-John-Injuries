@@ -32,22 +32,32 @@ changepoint_function <- function(pitcher_id, graph = FALSE) {
     
   
   # Building the model
-  Fastball_change <- cpt.meanvar(changepoint_data$release_spin_rate,
+  Fastball_change_spin <- cpt.meanvar(changepoint_data$release_spin_rate,
                                  method = "PELT",
                                  minseglen = 20)
+  Fastball_change_mph <- cpt.meanvar(changepoint_data$release_speed,
+                                      method = "PELT",
+                                      minseglen = 20)
   
   if (graph == TRUE) {
-    plot(Fastball_change)
+    plot(Fastball_change_spin)
+    plot(Fastball_change_mph)
   }
   
   
   change <- tibble(
     pitcher_id = pitcher_id,
     fastball_type = fastball,
-    most_recent_cpt = ifelse(ncpts(Fastball_change) == 0, NA, max(cpts(Fastball_change))),
-    most_recent_mean = tail(param.est(Fastball_change)$mean, 1),
-    previous_mean = ifelse(ncpts(Fastball_change) == 0, NA, tail(param.est(Fastball_change)$mean, 2)[1]),
-    number_cpt = ncpts(Fastball_change),
+    # spin
+    most_recent_cpt_spin = ifelse(ncpts(Fastball_change_spin) == 0, NA, max(cpts(Fastball_change_spin))),
+    most_recent_mean_spin = tail(param.est(Fastball_change_spin)$mean, 1),
+    previous_mean_spin = ifelse(ncpts(Fastball_change_spin) == 0, NA, tail(param.est(Fastball_change_spin)$mean, 2)[1]),
+    number_cpt_spin = ncpts(Fastball_change_spin),
+    # mph
+    most_recent_cpt_mph = ifelse(ncpts(Fastball_change_mph) == 0, NA, max(cpts(Fastball_change_mph))),
+    most_recent_mean_mph = tail(param.est(Fastball_change_mph)$mean, 1),
+    previous_mean_mph = ifelse(ncpts(Fastball_change_mph) == 0, NA, tail(param.est(Fastball_change_mph)$mean, 2)[1]),
+    number_cpt_mph = ncpts(Fastball_change_mph),
     number_of_fastballs = nrow(changepoint_data),
     tommy_john = 0
   )
@@ -55,7 +65,7 @@ changepoint_function <- function(pitcher_id, graph = FALSE) {
   return(change)
 }
 
-
-
-results <- map(NoTJ$pitcher, changepoint_function) |> 
-  bind_rows()
+# Results
+no_tj_results <- map(NoTJ$pitcher, changepoint_function) |> 
+  bind_rows() |> 
+  left_join(NoTJ, by = c("pitcher_id" = "pitcher"))
