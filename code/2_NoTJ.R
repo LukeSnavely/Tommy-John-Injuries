@@ -14,7 +14,7 @@ changepoint_function <- function(pitcher_id, graph = FALSE) {
     select(pitch_type, pitcher, game_date, release_speed, release_spin_rate, release_extension, pitch_name, spin_axis) |> 
     filter(pitcher == pitcher_id,
            # Filtering for only fastballs
-           pitch_type %in% c("FF", "FC", "FT", "FS"))
+           pitch_type %in% c("FF", "FC", "FT", "FS", "SI"))
   
   # Finding the most common fastball thrown
   fastball <- changepoint_data |> 
@@ -68,4 +68,5 @@ changepoint_function <- function(pitcher_id, graph = FALSE) {
 # Results
 no_tj_results <- map(NoTJ$pitcher, changepoint_function) |> 
   bind_rows() |> 
-  left_join(NoTJ, by = c("pitcher_id" = "pitcher"))
+  left_join(NoTJ, by = c("pitcher_id" = "pitcher")) |> 
+  mutate(year = 2025)
