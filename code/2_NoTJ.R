@@ -7,7 +7,7 @@ NoTJ <- read_csv("data/NoTJ.csv")
 # MLB Data from March to June 2025
 MLB_2025 <- read_csv("data/MLB_2025.csv")
 
-changepoint_function <- function(pitcher_id, graph = FALSE) {
+changepoint_function <- function(pitcher_id, graph_spin = FALSE, graph_mph = FALSE) {
   
   # Filtering the data for the desired pitcher
   changepoint_data <- MLB_2025 |> 
@@ -39,9 +39,16 @@ changepoint_function <- function(pitcher_id, graph = FALSE) {
                                       method = "PELT",
                                       minseglen = 20)
   
-  if (graph == TRUE) {
-    plot(Fastball_change_spin)
-    plot(Fastball_change_mph)
+  if (graph_spin == TRUE) {
+    plot(Fastball_change_spin,
+         xlab = "Number of Pitches",
+         ylab = "Spin Rate")
+  }
+  
+  if (graph_mph == TRUE) {
+    plot(Fastball_change_mph,
+         xlab = "Number of Pitches",
+         ylab = "MPH")
   }
   
   

@@ -27,7 +27,7 @@ TJ_2021 <- TJ |>
   filter(year == 2021)
 
 
-changepoint_function_by_data <- function(pitcher_id, data, graph = FALSE) {
+changepoint_function_by_data <- function(pitcher_id, data, graph_spin = FALSE, graph_mph = FALSE) {
   
   # Filtering the data for the desired pitcher
   changepoint_data <- data |> 
@@ -59,9 +59,16 @@ changepoint_function_by_data <- function(pitcher_id, data, graph = FALSE) {
                                      method = "PELT",
                                      minseglen = 20)
   
-  if (graph == TRUE) {
-    plot(Fastball_change_spin)
-    plot(Fastball_change_mph)
+  if (graph_spin == TRUE) {
+    plot(Fastball_change_spin,
+         xlab = "Number of Pitches",
+         ylab = "Spin Rate")
+  }
+  
+  if (graph_mph == TRUE) {
+    plot(Fastball_change_mph,
+         xlab = "Number of Pitches",
+         ylab = "MPH")
   }
   
   
@@ -84,6 +91,8 @@ changepoint_function_by_data <- function(pitcher_id, data, graph = FALSE) {
   
   return(change)
 }
+
+changepoint_function_by_data(669203, MLB_2025, graph_mph = TRUE)
 
 # Getting results
 # 2025
